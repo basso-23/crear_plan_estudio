@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  background-color: #171717;
+  color: #fafafa;
+}
+
+/* Establecer el fondo oscuro para toda la página */
+body {
+  background-color: #171717;
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Contenedor principal */
+div {
+  max-width: 800px;
+  width: 100%;
+  padding: 20px;
+  background-color: #2e2e2e;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* Estilo del título principal */
+h1 {
+  color: #f9a825;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Estilo para el formulario */
+form {
+  margin-bottom: 20px;
+}
+
+/* Estilo para el input de archivo */
+input[type="file"] {
+  background-color: #444;
+  color: white;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Estilo para el botón de enviar */
+button {
+  background-color: #f9a825;
+  color: #171717;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Efecto al pasar el ratón sobre el botón */
+button:hover {
+  background-color: #c17900;
+}
+
+/* Estilo para la sección del texto extraído */
+h2 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  color: #f9a825;
+}
+
+pre {
+  background-color: #333;
+  color: #dcdcdc;
+  padding: 15px;
+  border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
