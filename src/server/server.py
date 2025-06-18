@@ -51,7 +51,7 @@ async def process_pdf(file: UploadFile = File(...)):
         Los textos van a ser planes de estudios de diferentes grados de educacion y asignaturas así que ten eso en cuenta al momento de ordenar la información.
 
         Formato del JSON:
-        Debes incluir la clave "grado" con el nivel de grado del programa.
+        Debes incluir la clave "grado" con el nivel de grado del programa, siempre poner "grado" seguido del nivel.
         Debes incluir la clave "áreas" que contendrá una lista de áreas de aprendizaje.
 
         Para cada área de aprendizaje, debes incluir:

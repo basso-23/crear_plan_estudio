@@ -8,6 +8,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [jsonObtained, setJsonObtained] = useState([]);
   const [activeJson, setActiveJson] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   const fileInputRef = useRef();
 
@@ -66,11 +67,6 @@ export default function Dashboard() {
       activeJson.includes(item.id)
     );
 
-    if (selected.length === 0) {
-      alert("No hay archivos seleccionados");
-      return;
-    }
-
     try {
       const combined = selected.map((item) => JSON.parse(item.json));
 
@@ -92,9 +88,19 @@ export default function Dashboard() {
     }
   };
 
+  const handleViewSelected2 = () => {
+    const selected = jsonObtained.filter((item) =>
+      activeJson.includes(item.id)
+    );
+    const combined = selected.map((item) => JSON.parse(item.json));
+
+    setTableData(combined);
+    console.log(combined);
+  };
+
   return (
     <div className="main-container">
-      <div className="upload-container mx-auto mt-32">
+      <div className="upload-container mx-auto mt-20">
         <h1>Subir archivo</h1>
         <form onSubmit={handleSubmit}>
           <label className={loading ? "pointer-events-none" : ""}>
@@ -164,6 +170,12 @@ export default function Dashboard() {
             </button>
           );
         })}
+
+        {jsonObtained.length === 0 ? (
+          <button className="active-json invisible">
+            <div>no json obtained</div>
+          </button>
+        ) : null}
       </div>
 
       <div className=" flex gap-4 mt-10">
@@ -171,7 +183,7 @@ export default function Dashboard() {
         <button
           className={` tabla-btn
                 ${activeJson.length != 0 ? "" : "pointer-events-none"}`}
-          onClick={handleViewSelected}
+          onClick={handleViewSelected2}
         >
           Ver tabla
         </button>
@@ -187,7 +199,134 @@ export default function Dashboard() {
         </button>
       </div>
 
-      <div className="mt-96">tabla abajo</div>
+      {tableData.length > 0 && (
+        <div className=" mt-20 overflow-auto">
+          <table className="min-w-full table-auto border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-2">Grado</th>
+                <th className="border p-2">Área</th>
+                <th className="border p-2">Objetivos</th>
+                <th className="border p-2">Contenidos</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((item, i) =>
+                item.áreas.map((area, j) => (
+                  <tr key={`${i}-${j}`} className="bg-white">
+                    <td className="border p-2 align-top capitalize">
+                      {item.grado}
+                    </td>
+                    <td className="border p-2 align-top">{area.nombre}</td>
+                    <td className="border p-2 align-top">
+                      <ul className="list-disc ml-4">
+                        {area.objetivos?.map((obj, k) => (
+                          <li key={k}>{obj}</li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td className="border p-2 align-top">
+                      <ul className="list-disc mx-4">
+                        {area.contenidos?.map((contenido, k) => (
+                          <li key={k} className="list-none">
+                            <div className="mt-8 bg-[#fdf9e0] tema-style ">
+                              <strong>Tema:</strong> {contenido.tema}
+                            </div>
+
+                            <br />
+                            <strong>Conceptual:</strong>
+                            <ul className="list-disc list-inside">
+                              {Array.isArray(contenido.conceptual) ? (
+                                contenido.conceptual.map((linea, index) => (
+                                  <li key={index}>{linea}</li>
+                                ))
+                              ) : (
+                                <li>{contenido.conceptual}</li>
+                              )}
+                            </ul>
+                            <br />
+                            {contenido.procedimental && (
+                              <>
+                                <strong>Procedimental:</strong>
+
+                                <ul className="list-disc list-inside">
+                                  {Array.isArray(contenido.procedimental) ? (
+                                    contenido.procedimental.map(
+                                      (linea, index) => (
+                                        <li key={index}>{linea}</li>
+                                      )
+                                    )
+                                  ) : (
+                                    <li>{contenido.procedimental}</li>
+                                  )}
+                                </ul>
+
+                                <br />
+                              </>
+                            )}
+                            {contenido.actitudinal && (
+                              <>
+                                <strong>Actitudinal:</strong>
+
+                                <ul className="list-disc list-inside">
+                                  {Array.isArray(contenido.actitudinal) ? (
+                                    contenido.actitudinal.map(
+                                      (linea, index) => (
+                                        <li key={index}>{linea}</li>
+                                      )
+                                    )
+                                  ) : (
+                                    <li>{contenido.actitudinal}</li>
+                                  )}
+                                </ul>
+
+                                <br />
+                              </>
+                            )}
+                            {contenido.indicadores && (
+                              <>
+                                <strong>Indicadores:</strong>
+                                <ul className="list-disc list-inside">
+                                  {Array.isArray(contenido.indicadores) ? (
+                                    contenido.indicadores.map(
+                                      (linea, index) => (
+                                        <li key={index}>{linea}</li>
+                                      )
+                                    )
+                                  ) : (
+                                    <li>{contenido.indicadores}</li>
+                                  )}
+                                </ul>
+                                <br />
+                              </>
+                            )}
+                            {contenido.actividades && (
+                              <>
+                                <strong>Actividades:</strong>
+                                <ul className="list-disc list-inside">
+                                  {Array.isArray(contenido.actividades) ? (
+                                    contenido.actividades.map(
+                                      (linea, index) => (
+                                        <li key={index}>{linea}</li>
+                                      )
+                                    )
+                                  ) : (
+                                    <li>{contenido.actividades}</li>
+                                  )}
+                                </ul>
+                              </>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

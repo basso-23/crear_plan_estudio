@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"next dev --turbopack\" \"uvicorn src.server.server:app --reload --host 127.0.0.1 --port 8000\"",
     "build": "next build",
-    "start": "next start",
+    "start": "concurrently \"next start --turbopack\" \"uvicorn src.server.server:app --reload --host 127.0.0.1 --port 8000\"",
     "lint": "next lint"
   },
   "dependencies": {
