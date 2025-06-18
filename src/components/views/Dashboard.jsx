@@ -5,7 +5,7 @@ export default function Dashboard() {
   const [pdfFile, setPdfFile] = useState(null);
   const [extractedText, setExtractedText] = useState("");
   const [ingredient, setIngredient] = useState("");
-  const [recipes, setRecipes] = useState("");
+  const [jsonResponse, setJsonResponse] = useState("");
 
   const handleFileChange = (e) => {
     setPdfFile(e.target.files[0]);
@@ -28,33 +28,61 @@ export default function Dashboard() {
         const data = await response.json();
         setExtractedText(data.text);
       } else {
-        console.error("Error al extraer texto:", await response.text());
+        const errorData = await response.json();
+        alert(errorData.message); // Mostrar el mensaje de error si lo hay
       }
     } catch (error) {
       console.error("Error de red:", error);
     }
   };
 
-  const handleRecipeSubmit = async (e) => {
+  // Función para enviar texto a la API de FastAPI para convertir a JSON
+  const handleConvertTextToJson = async (e) => {
     e.preventDefault();
-    if (!ingredient.trim()) return alert("Por favor, ingresa un ingrediente");
+    if (!extractedText && !ingredient.trim())
+      return alert("Por favor, ingresa texto o ingrediente");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/recipes", {
+      const response = await fetch("http://127.0.0.1:8000/convert_to_json", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: ingredient }),
+        body: JSON.stringify({
+          name: extractedText || ingredient, // Enviar el texto extraído o el ingrediente ingresado
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setRecipes(data.recipes);
+        setJsonResponse(data.json); // Guardar la respuesta JSON
       } else {
-        console.error("Error al obtener recetas:", await response.text());
+        const errorData = await response.json();
+
+        // Si el mensaje de error es debido a los tokens excedidos, solo mostramos la alerta
+        if (
+          errorData.message &&
+          errorData.message.includes("El texto excede el límite de tokens")
+        ) {
+          alert(errorData.message); // Mostrar solo la alerta, no el error en consola
+        } else {
+          console.error("Error al convertir texto a JSON:", errorData.message);
+          alert("Ocurrió un error inesperado, por favor intenta de nuevo.");
+        }
       }
     } catch (error) {
       console.error("Error de red:", error);
     }
+  };
+
+  // Función para copiar al portapapeles
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("Texto copiado al portapapeles");
+      })
+      .catch((err) => {
+        console.error("Error al copiar al portapapeles:", err);
+      });
   };
 
   return (
@@ -73,24 +101,39 @@ export default function Dashboard() {
         <h2>Texto extraído:</h2>
         <pre>{extractedText}</pre>
       </div>
-
+      {extractedText && (
+        <button className="my-6" onClick={() => copyToClipboard(extractedText)}>
+          Copiar Texto Extraído
+        </button>
+      )}
       <hr style={{ margin: "40px 0", borderColor: "#555" }} />
 
-      <h1>Buscar recetas por ingrediente</h1>
-      <form onSubmit={handleRecipeSubmit}>
-        <input
-          type="text"
+      <h1>Convertir texto a JSON</h1>
+      <form onSubmit={handleConvertTextToJson}>
+        <textarea
           value={ingredient}
           onChange={(e) => setIngredient(e.target.value)}
-          placeholder="Ej: tomate"
+          placeholder="Ej: Introduce texto o un ingrediente"
           className="text-input"
+          rows={6} // Puedes ajustar el número de filas para que el textarea sea más grande
+          cols={50} // Ajusta el ancho del textarea
         />
-        <button type="submit">Buscar recetas</button>
+        <button type="submit" className="my-6">
+          Convertir a JSON
+        </button>
       </form>
 
       <div>
-        <h2>Recetas sugeridas:</h2>
-        <pre>{recipes}</pre>
+        <h2>Respuesta JSON:</h2>
+        <pre>{jsonResponse}</pre>
+        {jsonResponse && (
+          <button
+            className="my-6"
+            onClick={() => copyToClipboard(jsonResponse)}
+          >
+            Copiar JSON
+          </button>
+        )}
       </div>
     </div>
   );
