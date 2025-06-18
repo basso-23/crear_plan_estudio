@@ -62,10 +62,34 @@ export default function Dashboard() {
   };
 
   const handleViewSelected = () => {
-    const selectedJsons = jsonObtained.filter((item) =>
+    const selected = jsonObtained.filter((item) =>
       activeJson.includes(item.id)
     );
-    console.log("Contenido de JSON seleccionados:", selectedJsons);
+
+    if (selected.length === 0) {
+      alert("No hay archivos seleccionados");
+      return;
+    }
+
+    try {
+      const combined = selected.map((item) => JSON.parse(item.json));
+
+      const blob = new Blob([JSON.stringify(combined, null, 2)], {
+        type: "application/json",
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "planes_espanol.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error al combinar JSON:", error);
+      alert("Ocurrió un error al procesar los archivos seleccionados.");
+    }
   };
 
   return (
@@ -118,38 +142,48 @@ export default function Dashboard() {
         </form>
       </div>
 
+      <div className="mt-20 font-semibold">
+        JSON seleccionado ({activeJson.length})
+      </div>
       {/* Mostrar cada JSON como un rectángulo con el nombre del archivo */}
-      <div className="json-rectanggles-container mt-20 flex flex-wrap gap-4">
+      <div className="json-rectangles-container flex flex-wrap gap-4 mt-5">
         {jsonObtained.map((item) => {
           const isActive = activeJson.includes(item.id);
 
           return (
-            <div key={item.id} className="flex flex-col gap-2">
-              <div
-                onClick={() => toggleJsonSelection(item.id)}
-                className={`p-4 border rounded-md w-64 h-40 flex items-center justify-center shadow cursor-pointer transition
-                ${
-                  isActive
-                    ? "bg-blue-700 text-white border-blue-700"
-                    : "bg-blue-50 text-blue-700 border-blue-400"
-                }`}
-              >
-                <div className="text-center font-bold text-sm break-words">
-                  {item.fileName}
-                </div>
+            <button
+              key={item.id}
+              onClick={() => toggleJsonSelection(item.id)}
+              className={`transition-all cursor-pointer flex gap-3 items-center justify-center
+                ${isActive ? "active-json" : "inactive-json"}`}
+            >
+              <div className="json-image"></div>
+              <div>
+                <div className="text-center break-words">{item.fileName}</div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
 
-      {/* Botón para ver el contenido de los seleccionados */}
-      <div className="mt-10">
+      <div className=" flex gap-4 mt-10">
+        {/* Botón para ver el contenido de los seleccionados */}
         <button
-          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+          className={` tabla-btn
+                ${activeJson.length != 0 ? "" : "pointer-events-none"}`}
           onClick={handleViewSelected}
         >
-          ver consola
+          Ver tabla
+        </button>
+
+        <button
+          className={`submit-btn
+                ${
+                  activeJson.length != 0 ? "" : "opacity-50 pointer-events-none"
+                }`}
+          onClick={handleViewSelected}
+        >
+          Descargar
         </button>
       </div>
 

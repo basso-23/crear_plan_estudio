@@ -16,11 +16,11 @@
 
 .upload-container {
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 8px;
   width: 600px;
-
   overflow: hidden;
   padding: 24px 26px;
+  border: 1px solid #e7eae9;
 }
 
 .upload-container h1 {
@@ -79,31 +79,78 @@ form label:hover .add-icon {
   color: white;
   cursor: pointer;
   background-color: #0865f5;
-  border: none;
   border-radius: 6px;
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 13px;
   font-weight: 500;
+  width: 142px;
 }
 
 .loading-btn {
   color: white;
   cursor: pointer;
   background-color: #0865f5;
-  opacity: 75%;
-  border: none;
+  opacity: 50%;
   border-radius: 6px;
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 13px;
   font-weight: 500;
+  width: 142px;
 }
 
-button:hover {
+.submit-btn:hover {
   background-color: #0056b3;
 }
 
 button {
-  outline: none ;
+  outline: none;
+  user-select: none;
+}
+
+.active-json {
+  color: black;
+  background-color: #fdf9e0;
+  border: 1px solid #f5e693;
+  border-radius: 6px;
+  padding: 16px 28px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.inactive-json {
+  background-color: white;
+  padding: 16px 28px;
+  border: 1px solid #e7eae9;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  &:hover {
+    background-color: #ededed;
+  }
+}
+
+.json-image {
+  background-image: url("https://i.imgur.com/6wCiy9P.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  aspect-ratio: 1/1;
+  height: 25px;
+}
+
+.tabla-btn {
+  border: 1px solid #e7eae9;
+  cursor: pointer;
+  background-color: #ffffff;
+  border-radius: 6px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  width: 142px;
+  &:hover {
+    background-color: #ededed;
+  }
 }

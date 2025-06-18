@@ -82,7 +82,7 @@ async def process_pdf(file: UploadFile = File(...)):
 
         Los valores de las claves deben estar completos y no deben estar vacíos o nulos.
 
-        Si en el archivo hay errores de transcripción o secciones ilegibles, intenta hacer una estimación coherente en base al contexto, pero siempre indica cuando algo no es claro en el archivo original.
+        Si en el archivo hay errores de transcripción o secciones ilegibles, intenta hacer una estimación coherente en base al contexto, sin embargo siempre prioriza escribir la informacion tal cual como indica el texto.
 
         Evita duplicar áreas o temas dentro de un mismo nivel, es decir, cada área debe ser única.
 
