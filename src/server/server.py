@@ -27,11 +27,12 @@ app.add_middleware(
 )
 
 # ================================
-# SECCIÓN 1: API de Extracción de Texto desde PDF
+# Unificar la función de extracción y conversión
 # ================================
-@app.post("/extract_text")
-def extract_text(file: UploadFile = File(...)):
+@app.post("/process_pdf")
+async def process_pdf(file: UploadFile = File(...)):
     try:
+        # Primero, extraemos el texto del archivo PDF
         pdf_data = file.file.read()
         with pdfplumber.open(io.BytesIO(pdf_data)) as pdf:
             extracted_text = ""
@@ -42,20 +43,12 @@ def extract_text(file: UploadFile = File(...)):
                     extracted_text += text + "\n"
                 else:
                     extracted_text += "[Página sin texto detectable]\n"
-        return JSONResponse(content={"text": extracted_text})
-    except Exception as e:
-        return JSONResponse(status_code=400, content={"message": f"Error al procesar el archivo PDF: {str(e)}"})
 
-# ================================
-# SECCIÓN 2: API de OpenAI para convertir texto a JSON con formato específico
-# ================================
-@app.post("/convert_to_json")
-async def convert_to_json(ingredient: dict = Body(...)):
-    try:
+        # Ahora que tenemos el texto extraído, lo enviamos a OpenAI para convertirlo a JSON
         prompt = f"""
         Quiero que conviertas los texto que te doy a un JSON con el siguiente formato:
 
-        Los textos van a ser planes de estudios de diferentes grados de educacion y asignaturas asique ten eso en cuanta al momento de ordenar al informacion.
+        Los textos van a ser planes de estudios de diferentes grados de educacion y asignaturas así que ten eso en cuenta al momento de ordenar la información.
 
         Formato del JSON:
         Debes incluir la clave "grado" con el nivel de grado del programa.
@@ -95,7 +88,7 @@ async def convert_to_json(ingredient: dict = Body(...)):
 
         Aquí está el texto que debes convertir a JSON:
 
-        {ingredient['name']}
+        {extracted_text}
         """
 
         response = client.chat.completions.create(
@@ -110,10 +103,9 @@ async def convert_to_json(ingredient: dict = Body(...)):
         # Elimina los delimitadores de código (```json ... ```)
         clean_text = text.strip("```json").strip("```").strip()
 
-        return JSONResponse(content={"json": clean_text})
+        return JSONResponse(content={"json": clean_text, "text": extracted_text})
 
     except Exception as e:
         if "context_length_exceeded" in str(e):
-            # Si el error es por exceder el límite de tokens, enviar un mensaje específico
             return JSONResponse(status_code=400, content={"message": "El texto excede el límite de tokens de OpenAI. Por favor, reduce el tamaño del texto."})
-        return JSONResponse(status_code=500, content={"message": f"Error al consultar OpenAI: {str(e)}"})
+        return JSONResponse(status_code=500, content={"message": f"Error al procesar el archivo PDF: {str(e)}"})

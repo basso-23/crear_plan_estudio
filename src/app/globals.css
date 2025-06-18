@@ -1,105 +1,89 @@
 @import "tailwindcss"; /* Puedes quitar esta línea si no usas Tailwind */
 
 :root {
-  background-color: #171717;
-  color: #fafafa;
+  background-color: #f3f2f5;
+  color: #34333f;
+  font-family: "Inter Variable", sans-serif;
+  letter-spacing: -0.025em;
 }
 
-body {
-  background-color: #171717;
-  color: white;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.main-container {
   min-height: 100dvh;
-  text-align: center;
-
-  padding: 32px 0px;
+  width: 100%;
+  max-width: 1024px;
+  margin: auto;
 }
 
-div {
-  width: 750px;
-  background-color: #2e2e2e;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+.upload-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  width: 600px;
+  height: 450px;
   overflow: hidden;
+  padding: 24px 26px;
 }
 
-h1 {
-  color: #f9a825;
-  font-size: 2rem;
-  margin-bottom: 20px;
+.upload-container h1 {
+  font-weight: 600;
+  font-size: 20px;
 }
 
 form {
-  margin-bottom: 20px;
+  width: 100%;
+  border-radius: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
-/* PDF Input */
 input[type="file"] {
-  background-color: #444;
-  color: white;
-  padding: 10px;
-  border: 1px solid #333;
-  border-radius: 5px;
-  font-size: 1rem;
-  margin-right: 10px;
+  display: none;
+}
+
+form label {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
+  padding: 20px;
+  border: 2px dashed #e7eae9;
+  border-radius: 8px;
+  margin-top: 32px;
+  transition: background-color 0.3s;
 }
 
-/* Texto Input para recetas */
-input[type="text"] {
-  background-color: #444;
-  color: white;
-  padding: 10px;
-  border: 1px solid #333;
-  border-radius: 5px;
-  font-size: 1rem;
-  width: 60%;
-  margin-right: 10px;
+form label:hover {
+  background-color: #e6f0ff;
+  border: 2px dashed #007bff;
 }
 
-/* Botón general */
+form span {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 14px;
+}
+
+.add-icon {
+  margin-top: 26px;
+  color: #e7eae9;
+  font-size: 62px;
+}
+
+/* Estilos para el botón de enviar */
 button {
-  background-color: #f9a825;
-  color: #171717;
+  background-color: #007bff;
+  color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 1rem;
+  margin-top: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 button:hover {
-  background-color: #c17900;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin-top: 20px;
-  color: #f9a825;
-}
-
-pre {
-  background-color: #333;
-  color: #dcdcdc;
-  padding: 15px;
-  border-radius: 5px;
-  max-height: 300px;
-  overflow-y: auto;
-  text-align: left;
-  font-size: 1rem;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-textarea {
-  box-shadow: 0 4px 10px #0000004d;
-  font-size: 18px;
-  padding: 10px;
-  width: 100%;
+  background-color: #0056b3;
 }
