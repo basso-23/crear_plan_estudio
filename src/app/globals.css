@@ -1,4 +1,4 @@
-@import "tailwindcss"; /* Puedes quitar esta línea si no usas Tailwind */
+@import "tailwindcss";
 
 :root {
   background-color: #f3f2f5;
@@ -18,7 +18,7 @@
   background-color: #ffffff;
   border-radius: 12px;
   width: 600px;
-  height: 450px;
+
   overflow: hidden;
   padding: 24px 26px;
 }
@@ -51,7 +51,7 @@ form label {
   padding: 20px;
   border: 2px dashed #e7eae9;
   border-radius: 8px;
-  margin-top: 32px;
+  margin-top: 28px;
   transition: background-color 0.3s;
 }
 
@@ -63,27 +63,47 @@ form label:hover {
 form span {
   font-size: 14px;
   font-weight: 500;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .add-icon {
-  margin-top: 26px;
   color: #e7eae9;
-  font-size: 62px;
+  font-size: 75px;
 }
 
-/* Estilos para el botón de enviar */
-button {
-  background-color: #007bff;
+form label:hover .add-icon {
+  color: #007bff;
+}
+
+.submit-btn {
   color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 20px;
   cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
+  background-color: #0865f5;
+  border: none;
+  border-radius: 6px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.loading-btn {
+  color: white;
+  cursor: pointer;
+  background-color: #0865f5;
+  opacity: 75%;
+  border: none;
+  border-radius: 6px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 button:hover {
   background-color: #0056b3;
+}
+
+button {
+  outline: none ;
 }
