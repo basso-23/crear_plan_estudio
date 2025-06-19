@@ -13,6 +13,13 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+ALLOW_ORIGIN_URL = os.getenv("ALLOW_ORIGIN_URL")    
+ALLOW_ORIGIN_PORT = os.getenv("ALLOW_ORIGIN_PORT")   
+
+builded_url = f"http://{ALLOW_ORIGIN_URL}:{ALLOW_ORIGIN_PORT}"
+default_url1 = "http://localhost:3000"
+default_url2 = f"http://localhost:{ALLOW_ORIGIN_PORT}"
+
 # ================================
 # Configurar FastAPI y CORS
 # ================================
@@ -20,19 +27,18 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Cambia esto si tu frontend tiene otro origen
+    allow_origins=[builded_url, default_url1, default_url2],  # Cambia esto si tu frontend tiene otro origen
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ================================
-# Unificar la función de extracción y conversión
+# Extrae la informacion del PDF para luego mandarla a la API de openai
 # ================================
 @app.post("/process_pdf")
 async def process_pdf(file: UploadFile = File(...)):
     try:
-        # Primero, extraemos el texto del archivo PDF
         pdf_data = file.file.read()
         with pdfplumber.open(io.BytesIO(pdf_data)) as pdf:
             extracted_text = ""
@@ -44,15 +50,16 @@ async def process_pdf(file: UploadFile = File(...)):
                 else:
                     extracted_text += "[Página sin texto detectable]\n"
 
-        # Ahora que tenemos el texto extraído, lo enviamos a OpenAI para convertirlo a JSON
+        # Contexto para el modelo
         prompt = f"""
         Quiero que conviertas los texto que te doy a un JSON con el siguiente formato:
 
         Los textos van a ser planes de estudios de diferentes grados de educacion y asignaturas así que ten eso en cuenta al momento de ordenar la información.
 
         Formato del JSON:
-        Debes incluir la clave "grado" con el nivel de grado del programa, siempre poner "grado" seguido del nivel.
-        Debes incluir la clave "áreas" que contendrá una lista de áreas de aprendizaje.
+        Debes incluir la clave "grado" con el nivel de grado del programa, siempre poner "grado" seguido del nivel. Es decir si el grado es octavo deberia ir octavo grado. no octavo solo.
+        Debes incluir la clave "areas" que contendrá una lista de áreas de aprendizaje.
+        Debes incluir la clave "ano" que contendrá el año al que pertenece el plan de estudio.
 
         Para cada área de aprendizaje, debes incluir:
 
@@ -78,13 +85,15 @@ async def process_pdf(file: UploadFile = File(...)):
 
         Errores a evitar:
 
-        No deben faltar las claves principales del JSON como "grado", "áreas", "nombre", "objetivos", "contenidos", etc.
+        No deben faltar las claves principales del JSON como "grado", "areas", "ano", "nombre", "objetivos", "contenidos", etc.
 
         Los valores de las claves deben estar completos y no deben estar vacíos o nulos.
 
         Si en el archivo hay errores de transcripción o secciones ilegibles, intenta hacer una estimación coherente en base al contexto, sin embargo siempre prioriza escribir la informacion tal cual como indica el texto.
 
         Evita duplicar áreas o temas dentro de un mismo nivel, es decir, cada área debe ser única.
+
+        Importante: Todos los non-whitespace character eliminalos antes de darme la respuesta.
 
         Aquí está el texto que debes convertir a JSON:
 

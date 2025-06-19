@@ -9,9 +9,9 @@ export default function Dashboard() {
   const [jsonObtained, setJsonObtained] = useState([]);
   const [activeJson, setActiveJson] = useState([]);
   const [tableData, setTableData] = useState([]);
-
   const fileInputRef = useRef();
 
+  /// Manejo del form para subir PDF
   const handleFileChange = (e) => {
     setPdfFile(e.target.files[0]);
   };
@@ -25,8 +25,13 @@ export default function Dashboard() {
     const formData = new FormData();
     formData.append("file", pdfFile);
 
+    const PYTHON_SERVER_URL = process.env.NEXT_PUBLIC_PYTHON_SERVER_URL;
+    const PYTHON_SERVER_PORT = process.env.NEXT_PUBLIC_PYTHON_SERVER_PORT;
+
+    let builded_url = `http://${PYTHON_SERVER_URL}:${PYTHON_SERVER_PORT}/process_pdf`;
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/process_pdf", {
+      const response = await fetch(builded_url, {
         method: "POST",
         body: formData,
       });
@@ -56,13 +61,15 @@ export default function Dashboard() {
     }
   };
 
+  /// Guardar id de JSON seleccionado si no se encuentra; Quitar id de JSON seleccionado si ya se encuentra
   const toggleJsonSelection = (id) => {
     setActiveJson((prev) =>
       prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
   };
 
-  const handleViewSelected = () => {
+  /// Descargar JSONs seleccionado
+  const downloadJson = () => {
     const selected = jsonObtained.filter((item) =>
       activeJson.includes(item.id)
     );
@@ -88,7 +95,8 @@ export default function Dashboard() {
     }
   };
 
-  const handleViewSelected2 = () => {
+  /// Guarda los datos de los JSONs seleccionado en un solo JSON
+  const saveTableData = () => {
     const selected = jsonObtained.filter((item) =>
       activeJson.includes(item.id)
     );
@@ -100,6 +108,7 @@ export default function Dashboard() {
 
   return (
     <div className="main-container">
+      {/*//---- SUBIR PDF CONTAINER ---- */}
       <div className="upload-container mx-auto mt-20">
         <h1>Subir archivo</h1>
         <form onSubmit={handleSubmit}>
@@ -147,64 +156,88 @@ export default function Dashboard() {
           </div>
         </form>
       </div>
-
-      <div className="mt-20 font-semibold">
-        JSON seleccionado ({activeJson.length})
+      <div className="text-[13px] w-[600px] mx-auto mt-3 font-medium">
+        Nota: Según la cantidad de páginas puede tardar varios minutos.
       </div>
-      {/* Mostrar cada JSON como un rectángulo con el nombre del archivo */}
-      <div className="json-rectangles-container flex flex-wrap gap-4 mt-5">
-        {jsonObtained.map((item) => {
-          const isActive = activeJson.includes(item.id);
 
-          return (
-            <button
-              key={item.id}
-              onClick={() => toggleJsonSelection(item.id)}
-              className={`transition-all cursor-pointer flex gap-3 items-center justify-center
+      {/*//---- JSONs OBTENIDOS CONTAINER ---- */}
+
+      {jsonObtained.length > 0 && (
+        <>
+          <div className="mt-20 font-semibold">
+            JSON seleccionado ({activeJson.length})
+          </div>
+          <div className="json-rectangles-container flex flex-wrap gap-4 mt-5">
+            {jsonObtained.map((item) => {
+              const isActive = activeJson.includes(item.id);
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => toggleJsonSelection(item.id)}
+                  className={`transition-all cursor-pointer flex gap-3 items-center justify-center
                 ${isActive ? "active-json" : "inactive-json"}`}
-            >
-              <div className="json-image"></div>
-              <div>
-                <div className="text-center break-words">{item.fileName}</div>
-              </div>
-            </button>
-          );
-        })}
+                >
+                  <div className="json-image"></div>
+                  <div>
+                    <div className="text-center break-words">
+                      {item.fileName}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
 
-        {jsonObtained.length === 0 ? (
-          <button className="active-json invisible">
-            <div>no json obtained</div>
+            {jsonObtained.length === 0 ? (
+              <button className="active-json invisible">
+                <div>no json obtained</div>
+              </button>
+            ) : null}
+          </div>
+          <button
+            className="submit-btn !mt-8"
+            onClick={() => {
+              if (activeJson.length > 0) {
+                downloadJson();
+              } else {
+                alert("Selecciona un archivo JSON para descargar");
+              }
+            }}
+          >
+            Descargar
           </button>
-        ) : null}
-      </div>
+        </>
+      )}
 
-      <div className=" flex gap-4 mt-10">
-        {/* Botón para ver el contenido de los seleccionados */}
-        <button
-          className={` tabla-btn
-                ${activeJson.length != 0 ? "" : "pointer-events-none"}`}
-          onClick={handleViewSelected2}
-        >
-          Ver tabla
-        </button>
-
-        <button
-          className={`submit-btn
-                ${
-                  activeJson.length != 0 ? "" : "opacity-50 pointer-events-none"
-                }`}
-          onClick={handleViewSelected}
-        >
-          Descargar
-        </button>
-      </div>
-
+      {/*//---- TABLA CONTAINER ---- */}
+      {jsonObtained.length > 0 && (
+        <>
+          <div className="mt-20 font-semibold">
+            Visualizando datos JSON en tabla
+          </div>
+          <div className="flex gap-4">
+            <button
+              className="tabla-btn"
+              onClick={() => {
+                if (activeJson.length > 0) {
+                  saveTableData();
+                } else {
+                  alert("Selecciona un archivo JSON para mostar la tabla");
+                }
+              }}
+            >
+              Ver tabla
+            </button>
+          </div>
+        </>
+      )}
       {tableData.length > 0 && (
-        <div className=" mt-20 overflow-auto">
+        <div className="mt-8 overflow-auto">
           <table className="min-w-full table-auto border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
                 <th className="border p-2">Grado</th>
+                <th className="border p-2">Año</th>
                 <th className="border p-2">Área</th>
                 <th className="border p-2">Objetivos</th>
                 <th className="border p-2">Contenidos</th>
@@ -212,10 +245,13 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {tableData.map((item, i) =>
-                item.áreas.map((area, j) => (
+                item.areas.map((area, j) => (
                   <tr key={`${i}-${j}`} className="bg-white">
                     <td className="border p-2 align-top capitalize">
                       {item.grado}
+                    </td>
+                    <td className="border p-2 align-top capitalize">
+                      {item.ano}
                     </td>
                     <td className="border p-2 align-top">{area.nombre}</td>
                     <td className="border p-2 align-top">
