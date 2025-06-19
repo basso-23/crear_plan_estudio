@@ -8,10 +8,10 @@ Este repositorio contiene una aplicación web que permite subir archivos PDF, ex
 
 ## Funcionalidades
 
-- **Subida de archivos PDF**: El usuario puede subir uno o varios archivos PDF desde la interfaz web.
+- **Subida de archivos PDF**: El usuario puede subir archivos PDF desde la interfaz web.
 - **Extracción de contenido**: El texto del PDF es procesado y preparado para su análisis.
 - **Generación de plan de estudio con OpenAI**: El contenido extraído es enviado a la API de OpenAI junto con una instrucción para crear un plan de estudio en un formato específico.
-- **Visualización de resultados**: Se generan uno o varios archivos JSON con los planes de estudio, los cuales se pueden:
+- **Visualización de resultados**: Se generan los archivos JSON con los planes de estudio, los cuales se pueden:
   - Descargar individualmente.
   - Combinar varios en un solo archivo JSON.
   - Visualizar en formato de tabla según el JSON seleccionado.
@@ -21,14 +21,25 @@ Este repositorio contiene una aplicación web que permite subir archivos PDF, ex
 1. Subes un archivo PDF.
 2. El sistema extrae la información del documento.
 3. Se envía a OpenAI para generar el plan de estudio.
-4. Visualizas los planes en una tabla dinámica.
-5. Descargas el plan como JSON individual o combinado.
+4. Descargas el plan como JSON individual o combinado.
+5. Visualizas los planes en una tabla.
 
-## Razonamiento y tecnologías utilizadas
+## Razonamiento
 
-- **Razonamiento**: (React, HTML/CSS)
+El desarrollo del proyecto comenzó con una planificación general de los pasos necesarios para alcanzar el objetivo final. El primer reto fue la **extracción de datos desde archivos PDF**, para eso utilice la librería **`pdfplumber`** de Python, para manejar contenido estructurado dentro de archivos PDF.
 
-- **Tecnologías utilizadas**: (React, HTML/CSS)
+Sin embargo, existía otro problema: **cada PDF puede tener una estructura completamente distinta**, lo que hace imposible asumir un formato estándar o posiciones fijas para la información relevante.
+
+Para abordar este problema, la opcion mas eficiente fue **delegar el análisis y estructuración del contenido a un LLM**, utilizando la API de OpenAI. Elegimos el modelo **GPT-4.1-mini**, por su capacidad de manejar un mayor número de tokens, lo que nos permite enviar grandes volúmenes de texto en una sola solicitud para obtener una estructura coherente del plan de estudio.
+
+Una vez que ya teníamos las piezas principales del proyecto, solo restaba realizar la conexión entre el backend y el frontend, y estructurar la información obtenida de la API.
+
+## Tecnologías Utilizadas
+
+- **Python + FastAPI**: Se utilizó para construir el backend del proyecto, encargado de la lógica de extracción, procesamiento y comunicación con la API de OpenAI.
+- **pdfplumber**: Librería utilizada para extraer texto de los PDFs de forma precisa.
+- **OpenAI API (GPT-4.1-mini)**: Procesa el contenido extraído para estructurar automáticamente el plan de estudio.
+- **Next.js**: Framework usado en el frontend para crear una interfaz interactiva que se comunica con el backend.
 
 ## Resultados
 
