@@ -46,8 +46,6 @@ Una vez que ya teníamos las piezas principales del proyecto, solo restaba reali
 
 ## Resultados
 
-Aquí encontrarás enlaces a ejemplos de resultados generados por la aplicación.
-
 - [Descargar planes_espanol.json](https://drive.google.com/file/d/1qdWSe-YOQFrfTLqevPudFhbKqNjGW1cq/view?usp=sharing)
 
 
