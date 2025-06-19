@@ -34,6 +34,6 @@ Este repositorio contiene una aplicación web que permite subir archivos PDF, ex
 
 Aquí encontrarás enlaces a ejemplos de resultados generados por la aplicación.
 
-- [Descargar archivo planes_espanol.json](https://drive.google.com/file/d/1qdWSe-YOQFrfTLqevPudFhbKqNjGW1cq/view?usp=sharing)
+- [Descargar planes_espanol.json](https://drive.google.com/file/d/1qdWSe-YOQFrfTLqevPudFhbKqNjGW1cq/view?usp=sharing)
 
 
