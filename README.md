@@ -30,7 +30,7 @@ El desarrollo del proyecto comenzó con una planificación general de los pasos 
 
 Sin embargo, existía otro problema: **cada PDF puede tener una estructura completamente distinta**, lo que hace imposible asumir un formato estándar o posiciones fijas para la información relevante.
 
-Para abordar este problema, la opcion mas eficiente fue **delegar el análisis y estructuración del contenido a un LLM**, utilizando la API de OpenAI. Elegimos el modelo **GPT-4.1-mini**, por su capacidad de manejar un mayor número de tokens, lo que nos permite enviar grandes volúmenes de texto en una sola solicitud para obtener una estructura coherente del plan de estudio.
+Para abordar este problema, la opcion mas eficiente fue **delegar el análisis y estructuración del contenido a un LLM**, utilizando la API de OpenAI. Utilice el modelo **GPT-4.1-mini**, por su capacidad de manejar un mayor número de tokens, lo que nos permite enviar grandes volúmenes de texto en una sola solicitud para obtener una estructura coherente del plan de estudio.
 
 Una vez que ya teníamos las piezas principales del proyecto, solo restaba realizar la conexión entre el backend y el frontend, y estructurar la información obtenida de la API.
 
