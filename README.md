@@ -2,6 +2,9 @@
 
 Este repositorio contiene una aplicación web que permite subir archivos PDF, extraer su contenido y generar planes de estudio personalizados utilizando la API de OpenAI. La herramienta ofrece una forma sencilla y automatizada de transformar documentos en planes estructurados que puedes descargar y visualizar.
 
+> [!NOTE]
+> Para archivos con muchas páginas tardará unos 2:30 min aproximadamente. TODO: mejorar rendimiento
+
 ## Imagen
 
 ![Alt text](https://i.imgur.com/vVxn1Qc.png)
