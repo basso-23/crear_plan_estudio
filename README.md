@@ -2,11 +2,11 @@
 
 Este repositorio contiene una aplicación web que permite subir archivos PDF, extraer su contenido y generar planes de estudio personalizados utilizando la API de OpenAI. La herramienta ofrece una forma sencilla y automatizada de transformar documentos en planes estructurados que puedes descargar y visualizar.
 
-## 🖼 Imagen
+## Imagen
 
 ![Alt text](https://i.imgur.com/vVxn1Qc.png)
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - **Subida de archivos PDF**: El usuario puede subir uno o varios archivos PDF desde la interfaz web.
 - **Extracción de contenido**: El texto del PDF es procesado y preparado para su análisis.
@@ -16,7 +16,7 @@ Este repositorio contiene una aplicación web que permite subir archivos PDF, ex
   - Combinar varios en un solo archivo JSON.
   - Visualizar en formato de tabla según el JSON seleccionado.
 
-## 🖼️ Ejemplo de flujo de uso
+## Ejemplo de flujo de uso
 
 1. Subes un archivo PDF.
 2. El sistema extrae la información del documento.
@@ -24,14 +24,13 @@ Este repositorio contiene una aplicación web que permite subir archivos PDF, ex
 4. Visualizas los planes en una tabla dinámica.
 5. Descargas el plan como JSON individual o combinado.
 
-## 🧰 Tecnologías utilizadas
+## Razonamiento y tecnologías utilizadas
 
-- **Frontend**: (Ejemplo: React, Vue, HTML/CSS)
-- **Backend**: (Ejemplo: Node.js, Flask, Django)
-- **API**: OpenAI GPT
-- **Otros**: (PDF.js, pandas, etc.)
+- **Razonamiento**: (React, HTML/CSS)
 
-## 🔗 Resultados
+- **Tecnologías utilizadas**: (React, HTML/CSS)
+
+## Resultados
 
 Aquí encontrarás enlaces a ejemplos de resultados generados por la aplicación.
 
