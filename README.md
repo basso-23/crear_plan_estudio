@@ -5,7 +5,7 @@ Este repositorio contiene una aplicación web que permite subir archivos PDF, ex
 > [!NOTE]
 > Para archivos con muchas páginas tardará unos 2:30 min aproximadamente; TODO: mejorar rendimiento
 
-## Imagen
+## 
 
 ![Alt text](https://i.imgur.com/vVxn1Qc.png)
 
